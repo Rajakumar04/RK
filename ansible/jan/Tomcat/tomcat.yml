@@ -28,4 +28,12 @@
       ansible.builtin.unarchive:
         src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v10.1.4/bin/apache-tomcat-10.1.4.tar.gz
         remote_src: yes
-        dest: /opt/tomcat    
+        dest: /opt/tomcat
+    - name: symbolic link tomcat
+      ansible.builtin.file:
+        src: /opt/tomcat/apache-tomcat-10.1.4
+        dest: /opt/tomcat/latest
+        recurse: yes
+        owner: tomcat
+        group: tomcat
+        state: link        
