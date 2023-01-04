@@ -36,4 +36,12 @@
         recurse: yes
         owner: tomcat
         group: tomcat
-        state: link        
+        state: link
+    - name: change permission 
+      ansible.builtin.file:
+        dest: /opt/tomcat
+        recurse: yes
+        owner: tomcat
+        group: tomcat
+        state: directory
+
