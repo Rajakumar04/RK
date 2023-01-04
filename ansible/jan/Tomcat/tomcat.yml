@@ -46,7 +46,7 @@
     - name: create a systemd unit
       ansible.builtin.copy:
         src: tomcat.service
-        dest: sudo nano /etc/systemd/system/tomcat.service
+        dest: /etc/systemd/system/tomcat.service
         owner: tomcat
         group: tomcat
     - name: reload daemon, start tomcat
@@ -54,8 +54,8 @@
         name: tomcat.service
         daemon_reload: true
         enabled: yes
-        start: started
-            
+        state: started
+
 
           
 
