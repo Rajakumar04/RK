@@ -23,11 +23,11 @@
         state: present    
     - name: create  tomcat user
       ansible.builtin.user:
-        name: "{{group_name}}"
+        name: "{{user_name}}"
         create_home: yes
         group: "{{group_name}}"
         home: "{{user_home}}"
-        shell: "{{user_shel}}"
+        shell: "{{user_shell}}"
         state: present
     - name: download tomcat 10.1.4 
       ansible.builtin.get_url:
