@@ -10,7 +10,7 @@
     user_shell: /bin/false
     tomcat_version: "10.1.4"
     tomcat_major_version: "10"
-    tomcat.service.name: tomcat.service
+    tomcat_service_name: tomcat.service
   tasks:
     - name: java install
       ansible.builtin.apt:
