@@ -2,80 +2,89 @@
 - name: tomcat install on ubuntu
   hosts: all
   become: yes
+  vars:
+    java_pakage_name: openjdk-11-jdk
+    user_name: tomcat
+    group_name: tomcat
+    user_home: /opt/tomcat
+    user_shell: /bin/false
+    tomcat_version: "10.1.4"
+    tomcat_major_version: "10"
+    tomcat.service.name: tomcat.service
   tasks:
     - name: java install
       ansible.builtin.apt:
-        name: openjdk-11-jdk
+        name: "{{java_pakage_name}}"
         update_cache: true
         state: present
     - name: create a tomcat group
       ansible.builtin.group:
-        name: tomcat
+        name: "{{user_name}}"
         state: present    
     - name: create  tomcat user
       ansible.builtin.user:
-        name: tomcat
+        name: "{{user_name}}"
         create_home: yes
-        group: tomcat
-        home: /opt/tomcat
-        shell: /bin/false
+        group: "{{group_name}}"
+        home: "{{user_home}}"
+        shell: "{{user_shel}}"
         state: present
     - name: download tomcat 10.1.4 
       ansible.builtin.get_url:
-        url: https://www-eu.apache.org/dist/tomcat/tomcat-10/v10.1.4/bin/apache-tomcat-10.1.4.tar.gz
+        url: "https://www-eu.apache.org/dist/tomcat/tomcat-{{tomcat_major_version}}/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}tar.gz"
         dest: /tmp/apache-tomcat-10.1.4.tar.gz
     - name: extract tomcat
       ansible.builtin.unarchive:
-        src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v10.1.4/bin/apache-tomcat-10.1.4.tar.gz
+        src: "https://www-eu.apache.org/dist/tomcat/tomcat-10/v{{tomcat_version}}/bin/apache-tomcat-{{tomcat_version}}tar.gz"
         remote_src: yes
-        dest: /opt/tomcat
+        dest: "{{user_home}}"
     - name: symbolic link tomcat
       ansible.builtin.file:
-        src: /opt/tomcat/apache-tomcat-10.1.4
-        dest: /opt/tomcat/latest
+        src: "{{user_home}}/apache-tomcat-{{tomcat_version}}"
+        dest: "{{user_home}}/latest"
         state: link
     - name: change permission 
       ansible.builtin.file:
-        dest: /opt/tomcat
+        dest: "{{user_home}}"
         recurse: true
-        owner: tomcat
-        group: tomcat
+        owner: "{{user_name}}"
+        group: "{{group_name}}"
         state: directory
     - name: add execute permissions to shell files
       ansible.builtin.command: sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
     - name: create a systemd unit
       ansible.builtin.copy:
-        src: tomcat.service
-        dest: /etc/systemd/system/tomcat.service
-        owner: tomcat
-        group: tomcat
+        src: "{{tomcat.service.name}}"
+        dest: /etc/systemd/system/"{{tomcat.service.name}}"
+        owner: "{{user_name}}"
+        group: "{{group_name}}"
     - name: reload daemon, start tomcat
       ansible.builtin.systemd:
-        name: tomcat.service
+        name: "{{tomcat.service.name}}"
         daemon_reload: true
         enabled: yes
         state: started
     - name: copy the user xml
       ansible.builtin.copy:
         src: tomcat-users.xml
-        dest: /opt/tomcat/latest/conf/tomcat-users.xml
-        owner: tomcat
-        group: tomcat
+        dest: "{{user_home}}/latest/conf/tomcat-users.xml"
+        owner: "{{user_name}}"
+        group: "{{group_name}}"
     - name: copy the  manger app contex xml
       ansible.builtin.copy:
         src: contex.xml
-        dest: /opt/tomcat/latest/webapps/manager/META-INF/context.xml
-        owner: tomcat
-        group: tomcat
+        dest: "{{user_home}}/latest/webapps/manager/META-INF/context.xml"
+        owner: "{{user_name}}"
+        group: "{{group_name}}"
     - name: copy the host  manger app contex xml
       ansible.builtin.copy:
         src: hostmanger-contex.xml
-        dest: /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
-        owner: tomcat
-        group: tomcat    
+        dest: "{{user_home}}/latest/webapps/host-manager/META-INF/context.xml"
+        owner: "{{user_name}}"
+        group: "{{group_name}}"    
     - name: tomcat restart
       ansible.builtin.systemd:
-        name: tomcat.service
+        name: "{{tomcat.service.name}}"
         state: restarted
             
 
