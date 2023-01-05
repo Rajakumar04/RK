@@ -23,7 +23,7 @@
         state: present    
     - name: create  tomcat user
       ansible.builtin.user:
-        name: "{{user_name}}"
+        name: "{{group_name}}"
         create_home: yes
         group: "{{group_name}}"
         home: "{{user_home}}"
