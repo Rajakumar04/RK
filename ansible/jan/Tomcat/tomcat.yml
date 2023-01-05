@@ -40,8 +40,8 @@
         dest: "{{user_home}}"
     - name: symbolic link tomcat
       ansible.builtin.file:
-        src: "{{user_home}}/apache-tomcat-{{tomcat_version}}"
-        dest: "{{user_home}}/latest"
+        src: "{{ user_home }}/apache-tomcat-{{ tomcat_version }}"
+        dest: "{{ user_home }}/latest"
         state: link
     - name: change permission 
       ansible.builtin.file:
@@ -51,7 +51,7 @@
         group: "{{group_name}}"
         state: directory
     - name: add execute permissions to shell files
-      ansible.builtin.command: sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
+      ansible.builtin.command: "sudo sh -c 'chmod +x {{user_home}}/latest/bin/*.sh'"
     - name: create a systemd unit
       ansible.builtin.copy:
         src: "{{tomcat.service.name}}"
