@@ -15,9 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-   <role rolename="admin-gui"/>
-   <role rolename="manager-gui"/>
-   <user username="admin" password="admin_password" roles="admin-gui,manager-gui"/>
 <tomcat-users xmlns="http://tomcat.apache.org/xml"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
@@ -38,3 +35,7 @@
   application, do not forget to remove the <!.. ..> that surrounds them. You
   will also need to set the passwords to something appropriate.
   -->
+   <role rolename="admin-gui"/>
+   <role rolename="manager-gui"/>
+   <user username="admin" password="admin_password" roles="admin-gui,manager-gui"/>
+  </tomcat-users>
