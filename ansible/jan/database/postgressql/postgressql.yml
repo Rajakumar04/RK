@@ -3,4 +3,5 @@
    hosts: all
    roles:
     - role: geerlingguy.postgresql
+      postgres_port: 6543
       become: yes
